@@ -18,7 +18,7 @@ namespace BlazorApp.Api
         public void Configure(IWebJobsBuilder builder)
         {
 
-            string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection");
+            string connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 
             builder.Services.AddDbContext<EyerollContext>(options =>
                options.UseSqlServer(connectionString));

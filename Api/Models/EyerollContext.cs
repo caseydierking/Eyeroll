@@ -22,7 +22,7 @@ namespace BlazorApp.Api.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings:DefaultConnection"));
+                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("DefaultConnection"));
             }
         }
 
