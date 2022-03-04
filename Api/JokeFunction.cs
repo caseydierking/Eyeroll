@@ -18,11 +18,11 @@ namespace BlazorApp.Api
     public class JokeFunction
 
     {
-        private readonly EyerollContext eyeroll;
+        private readonly EyerollContext _eyeroll;
 
         public JokeFunction(EyerollContext eyeroll)
         {
-            this.eyeroll = eyeroll;
+            this._eyeroll = eyeroll;
         }
 
 
@@ -42,13 +42,40 @@ namespace BlazorApp.Api
 
             }
 
-            await eyeroll.Jokes.AddAsync(submittedJoke);
-            await eyeroll.SaveChangesAsync();
+            await _eyeroll.Jokes.AddAsync(submittedJoke);
+            await _eyeroll.SaveChangesAsync();
             return new OkObjectResult(submittedJoke);
         }
 
 
+        [FunctionName("GetJoke")]
+        public async Task<IActionResult> GetJoke(
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+           ILogger log)
+        {
 
-       
+            Random rand = new Random();
+            int toSkip = rand.Next(0, _eyeroll.Jokes.Count());
+
+            var joke = _eyeroll.Jokes.Skip(toSkip).Take(1).First();
+
+
+            //var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //var input = JsonConvert.DeserializeObject<Shared.Models.JokeRequest>(requestBody);
+            //var submittedJoke = new Models.Joke { Joke1 = input.Joke };
+
+            //if (submittedJoke.Joke1 == null || submittedJoke.Joke1 == "")
+            //{
+            //    return new BadRequestResult();
+
+            //}
+
+            //await eyeroll.Jokes.AddAsync(submittedJoke);
+            //await eyeroll.SaveChangesAsync();
+            return new OkObjectResult(joke);
+        }
+
+
+
     }
 }

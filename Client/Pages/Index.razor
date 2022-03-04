@@ -1,9 +1,82 @@
 ﻿@page "/"
+@using BlazorApp.Shared 
+@inject HttpClient Http
+<div class="bg-gradient-to-r from-green-400 to-blue-500 ... h-6"></div>
+                <div class="bg-white dark:bg-gray-800 ">
+                    <div class="text-center max-w-xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
+                        <h2 class="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
+                            <span class="block">
+                                Need a Dad Joke?
+                            </span>
+                            <span class="block text-green-500">
+                                We got you.
+                            </span>
+                        </h2>
+                        <p class="text-xl mt-4 max-w-md mx-auto text-gray-400">
+                            Because the eye roll only fuels us.
+                        </p>
 
-<PageTitle>Index</PageTitle>
+                        <div class="mt-6 flex justify-between">
+                            <div class="text-left text-blue-500 hover:text-blue-800 px-2"><a href="https://eyeroll.app/joke">https://eyeroll.app/joke</a></div>
+<!--                            <div class="text-right text-blue-500 hover:text-blue-800 px-2"><button onclick="copyText()">Copy</button> </div>-->
+                        </div>
 
-<h1>Hello, world!</h1>
+                        <div class="mb-6 mt-2 rounded-xl overflow-hidden bg-gray-800">
+                            <div id="joke" class="text-gray-100 py-4 px-6">@randomJoke.Joke1</div>
+                        </div>
+                        <div class="lg:mt-0 lg:flex-shrink-0">
+                            <div class="mt-3 inline-flex rounded-md shadow">
+                                <button type="button" @onclick="IncrementCount" class="py-4 px-6 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+
+
+    private Joke randomJoke = new Joke();
+
+
+    public partial class Joke
+    {
+        public int Id { get; set; }
+        public string Joke1 { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            randomJoke = await Http.GetFromJsonAsync<Joke>("/api/GetJoke");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+
+    private void IncrementCount()
+    {
+         GetJoke();
+    }
+
+
+
+    private async void GetJoke()
+    {
+         try
+        {
+            randomJoke = await Http.GetFromJsonAsync<Joke>("/api/GetJoke");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
+    }
+
+}
